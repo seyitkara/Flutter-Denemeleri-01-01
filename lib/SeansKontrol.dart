@@ -34,7 +34,8 @@ class _SeansKontrolState extends State<SeansKontrol> {
 
   Future<void> _fetchDatesAndStatuses() async {
     try {
-      CollectionReference collectionRef = FirebaseFirestore.instance.collection('dates');
+      CollectionReference collectionRef =
+          FirebaseFirestore.instance.collection('dates');
       QuerySnapshot querySnapshot = await collectionRef.get();
 
       List<Map<String, dynamic>> datesAndStatuses = [];
@@ -69,7 +70,8 @@ class _SeansKontrolState extends State<SeansKontrol> {
 
   Future<void> _fetchHourAndStatuses() async {
     try {
-      CollectionReference collectionRef = FirebaseFirestore.instance.collection('hours');
+      CollectionReference collectionRef =
+          FirebaseFirestore.instance.collection('hours');
       QuerySnapshot querySnapshot = await collectionRef.get();
 
       List<Map<String, dynamic>> hoursAndStatuses = [];
@@ -100,12 +102,12 @@ class _SeansKontrolState extends State<SeansKontrol> {
     } catch (e) {
       print('Hata: $e');
     }
-
   }
 
   Future<void> _fetchCheckboxValues() async {
     try {
-      CollectionReference collectionRef = FirebaseFirestore.instance.collection('combinedDatesTimes');
+      CollectionReference collectionRef =
+          FirebaseFirestore.instance.collection('combinedDatesTimes');
       QuerySnapshot querySnapshot = await collectionRef.get();
 
       Map<String, bool> fetchedCheckboxValues = {};
@@ -131,11 +133,9 @@ class _SeansKontrolState extends State<SeansKontrol> {
       setState(() {
         checkboxValues = fetchedCheckboxValues;
       });
-
     } catch (e) {
       print('Hata: $e');
     }
-
   }
 
   Future<void> _saveAllCheckboxValues() async {
@@ -150,7 +150,8 @@ class _SeansKontrolState extends State<SeansKontrol> {
 
       for (var date in _datesAndStatuses) {
         for (var hour in _hoursAndStatuses) {
-          String key = '${DateFormat('dd.MM.yyyy').format(date['date'])}-${hour['hour']}';
+          String key =
+              '${DateFormat('dd.MM.yyyy').format(date['date'])}-${hour['hour']}';
           bool value = checkboxValues[key] ?? false;
           allCheckboxValues[key] = value;
         }
@@ -164,10 +165,14 @@ class _SeansKontrolState extends State<SeansKontrol> {
       print('Hata: $e');
     }
   }
+
   Future<void> _deleteOldData() async {
     try {
       // Eski veritabanını sil
-      await FirebaseFirestore.instance.collection('combinedDatesTimes').get().then((snapshot) {
+      await FirebaseFirestore.instance
+          .collection('combinedDatesTimes')
+          .get()
+          .then((snapshot) {
         for (DocumentSnapshot ds in snapshot.docs) {
           ds.reference.delete();
         }
@@ -182,7 +187,8 @@ class _SeansKontrolState extends State<SeansKontrol> {
   Future<void> _saveDataToFirestore(Map<String, bool> data) async {
     try {
       // Yeni veritabanına verileri kaydet
-      CollectionReference collectionRef = FirebaseFirestore.instance.collection('combinedDatesTimes');
+      CollectionReference collectionRef =
+          FirebaseFirestore.instance.collection('combinedDatesTimes');
 
       for (var entry in data.entries) {
         String key = entry.key;
@@ -191,7 +197,8 @@ class _SeansKontrolState extends State<SeansKontrol> {
         List<String> parts = key.split('-');
         String formattedDate = parts[0];
         String formattedHour = parts[1];
-        DateTime datetime = DateFormat('dd.MM.yyyy HH:mm').parse('$formattedDate $formattedHour');
+        DateTime datetime = DateFormat('dd.MM.yyyy HH:mm')
+            .parse('$formattedDate $formattedHour');
 
         // Firestore'a kaydet
         await collectionRef.add({
@@ -206,8 +213,6 @@ class _SeansKontrolState extends State<SeansKontrol> {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -219,12 +224,14 @@ class _SeansKontrolState extends State<SeansKontrol> {
               scrollDirection: Axis.vertical,
               child: Table(
                 defaultColumnWidth: FixedColumnWidth(100.0),
-
                 children: [
                   TableRow(
                     children: [
                       SizedBox(),
-                      ..._hoursAndStatuses.map((item) => Center(child: Text(item['hour'].toString()))).toList(),
+                      ..._hoursAndStatuses
+                          .map((item) =>
+                              Center(child: Text(item['hour'].toString())))
+                          .toList(),
                     ],
                   ),
                   ..._datesAndStatuses.map((date) {
@@ -234,14 +241,18 @@ class _SeansKontrolState extends State<SeansKontrol> {
                           verticalAlignment: TableCellVerticalAlignment.middle,
                           child: Container(
                             height: 50.0,
-                            child: Center(child: Text(DateFormat('dd.MM.yyyy').format(date['date']))),
+                            child: Center(
+                                child: Text(DateFormat('dd.MM.yyyy')
+                                    .format(date['date']))),
                           ),
                         ),
                         ..._hoursAndStatuses.map((hour) {
-                          String key = '${DateFormat('dd.MM.yyyy').format(date['date'])}-${hour['hour']}';
+                          String key =
+                              '${DateFormat('dd.MM.yyyy').format(date['date'])}-${hour['hour']}';
                           bool value = checkboxValues[key] ?? false;
                           return TableCell(
-                            verticalAlignment: TableCellVerticalAlignment.middle,
+                            verticalAlignment:
+                                TableCellVerticalAlignment.middle,
                             child: Container(
                               height: 50.0,
                               child: Center(

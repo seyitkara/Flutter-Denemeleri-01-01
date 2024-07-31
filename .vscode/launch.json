@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": ".Flutter Denemeler",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "Dart Web",
+            "program": "web",
+            "request": "launch",
+            "type": "dart"
+        }
+    ]
+}
