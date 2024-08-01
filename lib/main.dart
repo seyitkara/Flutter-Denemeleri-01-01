@@ -91,6 +91,17 @@ class _DateTimeDisplayState extends State<DateTimeDisplay> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/images/my_image.png',
+              width: 256,
+              height: 256,
+            ),
+          ],
+        ),
+        SizedBox(width: 20),
         InkWell(
           onTap: () {
             Navigator.push(
@@ -118,14 +129,9 @@ class _DateTimeDisplayState extends State<DateTimeDisplay> {
                 );
               },
             ),
-            SizedBox(width: 10), // İkon ile resim arasındaki boşluk
-            Image.asset(
-              'assets/images/my_image.png',
-              width: 48,
-              height: 48,
-            ),
           ],
         ),
+        SizedBox(width: 20),
         Text(
           'Seans Kontrol',
           style: TextStyle(fontSize: 18),
