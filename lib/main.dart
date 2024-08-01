@@ -7,6 +7,7 @@ import 'SeansKontrol.dart';
 import 'SideMenu.dart';
 import 'DateTime.dart'; // DateTimePage sayfasını ekleyin
 import 'dart:async'; // Timer için
+import 'package:fluttertoast/fluttertoast.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -71,11 +72,14 @@ class DateTimeDisplay extends StatefulWidget {
 
 class _DateTimeDisplayState extends State<DateTimeDisplay> {
   String _dateTime = '';
+  late FToast fToast;
 
   @override
   void initState() {
     super.initState();
     _updateDateTime();
+    fToast = FToast();
+    fToast.init(context);
   }
 
   void _updateDateTime() {
@@ -84,6 +88,45 @@ class _DateTimeDisplayState extends State<DateTimeDisplay> {
         _dateTime = DateTime.now().toString();
       });
     });
+  }
+
+  void _showToast() {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.greenAccent,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.check),
+          SizedBox(
+            width: 12.0,
+          ),
+          Text("Toast mesaji budur"),
+        ],
+      ),
+    );
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.CENTER,
+      toastDuration: Duration(seconds: 8),
+    );
+
+    // Toast konumu
+    fToast.showToast(
+      child: toast,
+      toastDuration: Duration(seconds: 8),
+      positionedToastBuilder: (context, child) {
+        return Positioned(
+          child: child,
+          top: 16.0,
+          left: 16.0,
+        );
+      },
+    );
   }
 
   @override
@@ -104,6 +147,7 @@ class _DateTimeDisplayState extends State<DateTimeDisplay> {
         SizedBox(width: 20),
         InkWell(
           onTap: () {
+            _showToast();
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => Deneme()),
@@ -125,7 +169,7 @@ class _DateTimeDisplayState extends State<DateTimeDisplay> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SeansKontrolSayfa()),
+                  MaterialPageRoute(builder: (context) => SeansKontrol()),
                 );
               },
             ),
